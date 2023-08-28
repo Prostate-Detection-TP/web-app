@@ -32,32 +32,30 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import {useUserStore} from "@/stores/UserStore";
+import {useRouter} from "vue-router";
 
 const name = ref('')
 const email = ref('')
 const password = ref('')
 const error = ref(null)
 const checked = ref(false)
+const userStore = useUserStore();
 
-const store = useStore()
 const router = useRouter()
 
 const register = async () => {
   try {
-    console.log(name.value, email.value, password.value)
-    const res = await store.dispatch('register', {
+    await  userStore.register({
       email: email.value,
       password: password.value,
       name: name.value
-    })
-    console.log({res})
-    await router.push('/')
-  } catch (err: any) {
-    error.value = err.message
+    });
+    await router.push('/detect');
+  } catch (err) {
+    error.value = err.message;
   }
-}
+};
 </script>
 
 <style scoped>

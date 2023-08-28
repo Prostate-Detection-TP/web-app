@@ -32,9 +32,9 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import {useToast} from "primevue/usetoast";
+import {useUserStore} from "@/stores/UserStore";
 
 const email = ref('')
 const toast = useToast();
@@ -43,24 +43,27 @@ const password = ref('')
 const error = ref(null)
 const checked = ref(false)
 
-const store = useStore()
+
 const router = useRouter()
+const userStore = useUserStore();
 
 const login = async () => {
-  try {
 
-    const res = await store.dispatch('logIn', {
+    console.info('doing login')
+    const res = await userStore.logIn({
       email: email.value,
       password: password.value,
     })
+  console.log(userStore.loggedIn); // Debería ser true si el usuario está autenticado
+  console.log(userStore.user);
+    console.warn({res})
     console.log({res})
-    toast.add({ severity: "info", summary: "Success", detail: 'Authenticate successfully', life: 3000 });
-    await router.push('/detect')
-  } catch (err: any) {
-    error.value = err.message
-    toast.add({ severity: "error", summary: "Error", detail: `${err}`, life: 3000 });
+    if(res){
+      toast.add({ severity: "info", summary: "Success", detail: 'Authenticate successfully', life: 3000 });
+       await router.push('/detect')
+    }
 
-  }
+
 }
 </script>
 <style scoped>

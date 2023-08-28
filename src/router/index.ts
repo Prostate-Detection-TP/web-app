@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import DetectionVue from "@/detection/DetectionVue.vue";
 import Register from "@/iam/Register.vue";
 import Login from "@/iam/Login.vue";
+import {useUserStore} from "@/stores/UserStore";
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,7 +29,8 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: DetectionVue
+      component: DetectionVue,
+      meta: { requiresAuth: true, visible: true }  // <-- Añade esta línea
     },
     {
       path: '/register',
@@ -39,5 +43,18 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!userStore.loggedIn) {
+      next({ name: 'Login' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 export default router

@@ -46,9 +46,7 @@ import SpeedDial from "primevue/speeddial";
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth'
 import { getAnalytics } from "firebase/analytics";
-import store from './store'
 
-// Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 
@@ -59,7 +57,7 @@ import store from './store'
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(store)
+
 app.use(router);
 app.directive("styleclass", StyleClass);
 app.use(PrimeVue, {inputStyle: 'filled'});
