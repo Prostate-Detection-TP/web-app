@@ -27,8 +27,14 @@ const userStore = useUserStore();
 const routes = useRouter().getRoutes().filter(e => e.meta.visible);
 console.log({routes})
 
-const userData = computed(() => userStore.user);
-const email = computed(() => userData.value?.email || 'No user');
+const userData = computed(() => userStore.user, {
+  onTrigger(e) {
+    console.log({e});
+    console.log(userData.value)
+  }
+});
+const email = computed(() => userData.value?.complementedData.displayName || 'No user');
+
 console.log(userData.value)
 
 </script>

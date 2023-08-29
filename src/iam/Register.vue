@@ -8,14 +8,26 @@
     </div>
 
     <div>
-      <label for="name" class="block text-900 font-medium mb-2">Name</label>
-      <InputText id="name" type="text" v-model="name" class="w-full mb-3" />
+
 
       <label for="email1" class="block text-900 font-medium mb-2">Email</label>
       <InputText id="email1" type="text" v-model="email" class="w-full mb-3" />
 
       <label for="password1" class="block text-900 font-medium mb-2">Password</label>
       <InputText id="password1" type="password" v-model="password" class="w-full mb-3" />
+
+      <div class="block">
+        <label for="name" class=" text-900 font-medium mb-2">Name</label>
+        <InputText id="name" style="margin: 10px"  type="text" v-model="name" class=" mb-3" />
+
+        <label for="name"  class=" text-900 font-medium mb-2">Description</label>
+
+        <InputText id="name" style="margin: 10px" type="text" v-model="descripcion" class=" mb-3" />
+
+        <label for="name" class=" text-900 font-medium mb-2">Code</label>
+        <InputText id="name" style="margin: 10px" type="text" v-model="code" class="w mb-3" />
+      </div>
+
 
       <div class="flex align-items-center justify-content-between mb-6">
         <div class="flex align-items-center">
@@ -24,7 +36,8 @@
         </div>
         <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
       </div>
-
+      <Button style="background-color: aliceblue; color: black; margin-bottom: 10px " label="Sign In with Google" @click="signInWithGoogle" icon="pi pi-google" class="w-full"></Button>
+      <br>
       <Button label="Sign In" @click="register" icon="pi pi-user" class="w-full"></Button>
     </div>
   </div>
@@ -36,21 +49,37 @@ import {useUserStore} from "@/stores/UserStore";
 import {useRouter} from "vue-router";
 
 const name = ref('')
+const descripcion = ref('')
+const code = ref('')
+//const descripcion = ref('')
 const email = ref('')
 const password = ref('')
 const error = ref(null)
 const checked = ref(false)
 const userStore = useUserStore();
 
-const router = useRouter()
+const router = useRouter();
 
 const register = async () => {
   try {
     await  userStore.register({
       email: email.value,
       password: password.value,
-      name: name.value
+      name: name.value,
+      displayName: name.value,
+      description: 'Hola, soy nuevo',
+      code: '41552325',
+      photoURL: 'https://static.vecteezy.com/system/resources/previews/005/520/145/original/cartoon-drawing-of-a-doctor-vector.jpg'
     });
+    await router.push('/detect');
+  } catch (err) {
+    error.value = err.message;
+  }
+};
+
+const signInWithGoogle = async () => {
+  try {
+    await userStore.signInWithGoogle();
     await router.push('/detect');
   } catch (err) {
     error.value = err.message;

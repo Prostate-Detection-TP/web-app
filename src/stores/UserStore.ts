@@ -1,13 +1,18 @@
 // store.ts o store/index.ts
 import { defineStore } from 'pinia'
-import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from 'firebase/auth'
-import { auth } from '../firebaseConfig';
+import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut, updateProfile} from 'firebase/auth'
+import { auth, googleProvider } from '../firebaseConfig';
+import { getAuth, GoogleAuthProvider, signInWithPopup  } from 'firebase/auth'
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from '../firebaseConfig';
+
 
 export const useUserStore = defineStore({
     id: 'user',
     state: () => ({
         loggedIn: false,
-        data: null
+        data: null,
+        complementedData : null
     }),
     getters: {
         user() {
@@ -15,15 +20,35 @@ export const useUserStore = defineStore({
         }
     },
     actions: {
-        async register({ email, password, name }) {
-            const response = await createUserWithEmailAndPassword(auth, email, password);
-            if (response) {
+        async register({ email, password, name, description, code, displayName, photoURL }) {
+            console.log("Inicio de la función register");
+            try {
+                const response = await createUserWithEmailAndPassword(auth, email, password);
+                console.log("Usuario creado con Firebase Auth:", response);
+
                 this.data = response.user;
-                await (response.user as any).updateProfile({ displayName: name });
-                sessionStorage.setItem("email", email);
-                sessionStorage.setItem("password", password);
-            } else {
-                throw new Error('Unable to register user');
+                try {
+                    await updateProfile({ displayName: displayName, photoURL: photoURL });
+                    console.log("Perfil actualizado");
+                } catch (error) {
+                    console.error("Error al actualizar el perfil:", error);
+                }
+                console.log("Usuario autenticado:", auth.currentUser);
+
+                console.log(displayName)
+                const userDocRef = doc(db, 'users', response.user.uid);
+                const r = await setDoc(userDocRef, {
+                    description: description,
+                    displayName: displayName,
+                    code: code,
+                    photoURL: photoURL
+                });
+                console.log("Datos guardados en Firestore:", r);
+                this.data = response.user;
+                this.loggedIn = true;
+                await this.fetchComplementedData(response.user.uid);
+            } catch (error) {
+                console.error("Error en la función register:", error);
             }
         },
         async logIn({ email, password }) {
@@ -31,11 +56,27 @@ export const useUserStore = defineStore({
             if (response) {
                 this.data = response.user;
                 this.loggedIn = true;
+                await this.fetchComplementedData(response.user.uid);
                 return true;
             } else {
                 this.loggedIn = false;
                 throw new Error('login failed');
                 return true;
+            }
+        },
+        async signInWithGoogle() {
+            try {
+                const response = await signInWithPopup(auth, googleProvider);
+                if (response) {
+                    this.data = response.user;
+                    this.loggedIn = true;
+                    await this.fetchComplementedData(response.user.uid);
+                } else {
+                    throw new Error('Google sign-in failed');
+                }
+            } catch (error) {
+                console.error("Error signing in with Google: ", error);
+                throw error;
             }
         },
         async logOut() {
@@ -53,6 +94,21 @@ export const useUserStore = defineStore({
             } else {
                 this.data = null;
             }
+        },
+        async fetchComplementedData(uid: any) {
+            try {
+                const userDocRef = doc(db, 'users', uid);
+                const docSnap = await getDoc(userDocRef);
+
+                if (docSnap.exists()) {
+                    this.data.complementedData = docSnap.data();
+                } else {
+                    console.log("No such document!");
+                }
+            } catch (error) {
+                console.error("Error fetching complemented data:", error);
+            }
         }
+
     }
 });

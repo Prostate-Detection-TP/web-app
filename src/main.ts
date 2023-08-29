@@ -44,7 +44,7 @@ import SpeedDial from "primevue/speeddial";
 
 //FIRABASE
 import { initializeApp } from "firebase/app";
-import { getAuth } from 'firebase/auth'
+import { getAuth, GoogleAuthProvider  } from 'firebase/auth'
 import { getAnalytics } from "firebase/analytics";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional

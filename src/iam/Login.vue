@@ -22,6 +22,7 @@
         </div>
         <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
       </div>
+      <Button style="background-color: aliceblue; color: black; margin-bottom: 10px " label="Sign In with Google" @click="signInWithGoogle" icon="pi pi-google" class="w-full"></Button>
 
       <Button label="Sign In" @click="login" icon="pi pi-user" class="w-full"></Button>
     </div>

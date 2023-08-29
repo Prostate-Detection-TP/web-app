@@ -4,6 +4,7 @@ import DetectionVue from "@/detection/DetectionVue.vue";
 import Register from "@/iam/Register.vue";
 import Login from "@/iam/Login.vue";
 import {useUserStore} from "@/stores/UserStore";
+import Profile from "@/profile/Profile.vue";
 
 
 
@@ -26,11 +27,14 @@ const router = createRouter({
     {
       path: '/detect',
       name: 'detection',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: DetectionVue,
-      meta: { requiresAuth: true, visible: true }  // <-- Añade esta línea
+      meta: { requiresAuth: true, visible: true }
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile,
+      meta: { requiresAuth: true, visible: true }
     },
     {
       path: '/register',
