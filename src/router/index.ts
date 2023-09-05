@@ -37,10 +37,17 @@ const router = createRouter({
       meta: { requiresAuth: true, visible: true }
     },
     {
+      path: '/historic',
+      name: 'Historic',
+      component: () => import('../views/HistoricResults.vue'),
+      meta: { requiresAuth: true, visible: true }
+    },
+    {
       path: '/register',
       name: 'Register',
       component: Register
-    },{
+    },
+    {
     path: '/login',
       name: 'Login',
       component: Login

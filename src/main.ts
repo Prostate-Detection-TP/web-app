@@ -37,7 +37,7 @@ import Image from "primevue/image";
 import FileUpload from "primevue/fileupload";
 import Breadcrumb from "primevue/breadcrumb";
 import ProgressSpinner from "primevue/progressspinner";
-import ProgressBar from "primevue/progressspinner";
+import ProgressBar from 'primevue/progressbar';
 import Badge from "primevue/progressspinner";
 import Avatar from "primevue/avatar";
 import SpeedDial from "primevue/speeddial";
@@ -48,6 +48,8 @@ import { getAuth, GoogleAuthProvider  } from 'firebase/auth'
 import { getAnalytics } from "firebase/analytics";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+import HighchartsVue from 'highcharts-vue';
 
 
 
@@ -62,6 +64,7 @@ app.use(router);
 app.directive("styleclass", StyleClass);
 app.use(PrimeVue, {inputStyle: 'filled'});
 app.use(ToastService);
+app.use(HighchartsVue);
 
 app.component('InputText', InputText);
 app.component('Button', Button);
