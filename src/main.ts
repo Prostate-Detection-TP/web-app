@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import Carousel3d from 'vue-carousel-3d';
 
 //PRIME VUE COMPONENTS
 import PrimeVue from "primevue/config";
@@ -41,6 +42,9 @@ import ProgressBar from 'primevue/progressbar';
 import Badge from "primevue/progressspinner";
 import Avatar from "primevue/avatar";
 import SpeedDial from "primevue/speeddial";
+import Chart from 'primevue/chart';
+import Carousel from 'primevue/carousel';
+
 
 //FIRABASE
 import { initializeApp } from "firebase/app";
@@ -61,6 +65,7 @@ const app = createApp(App)
 app.use(createPinia())
 
 app.use(router);
+app.use(Carousel3d);
 app.directive("styleclass", StyleClass);
 app.use(PrimeVue, {inputStyle: 'filled'});
 app.use(ToastService);
@@ -73,6 +78,7 @@ app.component('Card', Card);
 app.component('Chip', Chip);
 app.component('Divider', Divider);
 app.component('Tag', Tag);
+app.component('Carousel',Carousel)
 app.component('Chips', Chips);
 app.component('Textarea', Textarea);
 app.component('Image', Image);
@@ -81,7 +87,8 @@ app.component('FileUpload', FileUpload);
 app.component('ScrollPanel', ScrollPanel);
 app.component("Dialog", Dialog);
 app.component('Checkbox', Checkbox);
-app.component('Password', Password)
+app.component('Password', Password);
+app.component('Chart', Chart);
 app.component('Toast', Toast)
 app.component('Badge', Badge)
 app.component('Breadcrumb', Breadcrumb)

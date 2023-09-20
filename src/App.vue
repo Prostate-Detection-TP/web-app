@@ -7,9 +7,10 @@
       </div>
       <ul class="menu">
         <li v-for="route in routes"  :key="route.path"> <router-link :to="route.path">{{route.name}}</router-link></li>
-
       </ul>
+      
     </div>
+    <Button v-if="isLoggedIn" style="float: inline-end; margin: 10px" label="Log out" @click="doLogout" />
   </header>
   <RouterView />
 </template>
@@ -18,10 +19,15 @@
 import {RouterLink, RouterView, useRouter} from 'vue-router'
 import {useUserStore} from "@/stores/UserStore";
 import {computed, reactive, ref, watch} from "vue";
+import router from './router';
 
 const userStore = useUserStore();
 
-
+const doLogout = async () => {
+  await userStore.logOut();
+  router.push('/login')
+}
+const isLoggedIn = computed(()=> userData.value?.complementedData.displayName)
 
 
 const routes = useRouter().getRoutes().filter(e => e.meta.visible);
@@ -33,7 +39,7 @@ const userData = computed(() => userStore.user, {
     console.log(userData.value)
   }
 });
-const email = computed(() => userData.value?.complementedData.displayName || 'No user');
+const email = computed(() => userData.value?.complementedData.displayName || '');
 
 console.log(userData.value)
 
