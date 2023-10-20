@@ -123,7 +123,7 @@ const analyzeImage = async (file: any) => {
     const formData = new FormData();
     formData.append('image', file);
 
-    const { data } = await axios.post('http://127.0.0.1:5000/predict', formData, {
+    const { data } = await axios.post('https://prostata-634feea2dfe4.herokuapp.com/predict', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -155,6 +155,7 @@ const analyzeImage = async (file: any) => {
 const onAnalyzeImages = async () => {
   console.log('analaizin...')
   console.log(predictions.value)
+  loading.value = true;
   openModal.value = true;
   // loading.value = true;
   // // Analiza todas las imágenes cargadas
