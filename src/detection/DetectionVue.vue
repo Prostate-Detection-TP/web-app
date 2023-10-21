@@ -9,6 +9,7 @@
               class="browse-files-text">browse file</span> <span>from device</span> </span> </label>
       </div>
       <div v-if="showPrevImg">
+        <Skeleton v-if="loading" width="100%" height="150px"></Skeleton>
         <div class="">
           <div class="">
             <Image :src="prevImgUrl[currentIndex]" alt="Image" width="250" />
