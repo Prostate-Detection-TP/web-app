@@ -1,4 +1,8 @@
 <template>
+  <div>
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loading">Loading...</div>
+    </div>
   <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
   <form class="form-container" enctype='multipart/form-data'>
     <div class="upload-files-container" v-if="!loading">
@@ -52,6 +56,7 @@
     </Dialog>
     <Toast style="margin-top: 80px;" />
   </form>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +70,8 @@ import { SinglePrediction } from '../models/singlePrediction';
 const toast = useToast();
 const loading = ref(false);
 const openModal = ref(false);
+const isLoading = ref(false);
+
 
 const totalSize = ref(0);
 const totalSizePercent = ref(0);
@@ -119,6 +126,7 @@ const onFileSelected = async (event: any) => {
 
 const analyzeImage = async (file: any) => {
   loading.value = true;
+  isLoading.value = true;
 
   try {
     const formData = new FormData();
@@ -150,6 +158,7 @@ const analyzeImage = async (file: any) => {
     console.error('Error al analizar la imagen:', error);
   } finally {
     loading.value = false;
+    isLoading.value = false;
   }
 };
 
@@ -460,6 +469,26 @@ body {
 .slider-controls button[disabled] {
   cursor: not-allowed;
   color: #ccc;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.loading {
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.85);
 }
 
 .slider__nav {
