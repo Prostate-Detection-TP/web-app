@@ -124,7 +124,7 @@ const analyzeImage = async (file: any) => {
     const formData = new FormData();
     formData.append('image', file);
 
-    const { data } = await axios.post('https://prostata-634feea2dfe4.herokuapp.com/predict', formData, {
+    const { data } = await axios.post('https://prostata-server-app-2f18d01a3791.herokuapp.com/predict', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
